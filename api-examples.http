@@ -1,0 +1,271 @@
+### Task Management API - Example Requests
+### Use this file with REST Client extension in VS Code or copy to Postman
+
+@baseUrl = http://localhost:5000
+@userId = YOUR_USER_ID_HERE
+@projectId = YOUR_PROJECT_ID_HERE
+@taskId = YOUR_TASK_ID_HERE
+
+### ============================================
+### HEALTH CHECK
+### ============================================
+
+### Check if server is running
+GET {{baseUrl}}/health
+
+### ============================================
+### USER ENDPOINTS
+### ============================================
+
+### Create a new user
+POST {{baseUrl}}/api/users
+Content-Type: application/json
+
+{
+  "username": "johndoe",
+  "email": "john@example.com",
+  "password": "password123",
+  "fullName": "John Doe",
+  "role": "user"
+}
+
+### Create an admin user
+POST {{baseUrl}}/api/users
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "email": "admin@example.com",
+  "password": "admin123",
+  "fullName": "Admin User",
+  "role": "admin"
+}
+
+### Get all users
+GET {{baseUrl}}/api/users
+
+### Get users with pagination
+GET {{baseUrl}}/api/users?page=1&limit=5
+
+### Get users with filtering
+GET {{baseUrl}}/api/users?role=admin&isActive=true
+
+### Search users
+GET {{baseUrl}}/api/users?search=john
+
+### Get users sorted
+GET {{baseUrl}}/api/users?sortBy=createdAt&order=desc
+
+### Get user by ID
+GET {{baseUrl}}/api/users/{{userId}}
+
+### Update user
+PUT {{baseUrl}}/api/users/{{userId}}
+Content-Type: application/json
+
+{
+  "fullName": "John Doe Updated",
+  "isActive": true
+}
+
+### Delete user
+DELETE {{baseUrl}}/api/users/{{userId}}
+
+### Get active users
+GET {{baseUrl}}/api/users/active/list
+
+### Get users by role
+GET {{baseUrl}}/api/users/role/admin
+
+### ============================================
+### PROJECT ENDPOINTS
+### ============================================
+
+### Create a new project
+POST {{baseUrl}}/api/projects
+Content-Type: application/json
+
+{
+  "name": "Website Redesign",
+  "description": "Complete redesign of company website",
+  "owner": "{{userId}}",
+  "members": ["{{userId}}"],
+  "status": "active",
+  "priority": "high",
+  "startDate": "2024-01-01",
+  "tags": ["frontend", "design", "ui/ux"],
+  "budget": 50000
+}
+
+### Get all projects
+GET {{baseUrl}}/api/projects
+
+### Get projects with filtering
+GET {{baseUrl}}/api/projects?status=active&priority=high
+
+### Search projects
+GET {{baseUrl}}/api/projects?search=website
+
+### Get project by ID
+GET {{baseUrl}}/api/projects/{{projectId}}
+
+### Update project
+PUT {{baseUrl}}/api/projects/{{projectId}}
+Content-Type: application/json
+
+{
+  "status": "completed",
+  "endDate": "2024-12-31"
+}
+
+### Add member to project
+POST {{baseUrl}}/api/projects/{{projectId}}/members
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}"
+}
+
+### Remove member from project
+DELETE {{baseUrl}}/api/projects/{{projectId}}/members/{{userId}}
+
+### Get project analytics
+GET {{baseUrl}}/api/projects/{{projectId}}/analytics
+
+### Delete project
+DELETE {{baseUrl}}/api/projects/{{projectId}}
+
+### ============================================
+### TASK ENDPOINTS
+### ============================================
+
+### Create a new task
+POST {{baseUrl}}/api/tasks
+Content-Type: application/json
+
+{
+  "title": "Design Homepage Mockup",
+  "description": "Create a modern homepage design with hero section",
+  "project": "{{projectId}}",
+  "assignedTo": "{{userId}}",
+  "createdBy": "{{userId}}",
+  "status": "todo",
+  "priority": "high",
+  "dueDate": "2024-12-31",
+  "estimatedHours": 8,
+  "tags": ["design", "ui", "homepage"]
+}
+
+### Create another task
+POST {{baseUrl}}/api/tasks
+Content-Type: application/json
+
+{
+  "title": "Implement Contact Form",
+  "description": "Create and integrate contact form with backend",
+  "project": "{{projectId}}",
+  "assignedTo": "{{userId}}",
+  "createdBy": "{{userId}}",
+  "status": "in-progress",
+  "priority": "medium",
+  "dueDate": "2024-11-30",
+  "estimatedHours": 5,
+  "tags": ["frontend", "forms"]
+}
+
+### Get all tasks
+GET {{baseUrl}}/api/tasks
+
+### Get tasks with filtering
+GET {{baseUrl}}/api/tasks?status=todo&priority=high
+
+### Get tasks by project
+GET {{baseUrl}}/api/tasks?project={{projectId}}
+
+### Get tasks assigned to user
+GET {{baseUrl}}/api/tasks?assignedTo={{userId}}
+
+### Get tasks with pagination
+GET {{baseUrl}}/api/tasks?page=1&limit=10&sortBy=dueDate&order=asc
+
+### Search tasks
+GET {{baseUrl}}/api/tasks?search=design
+
+### Get task by ID
+GET {{baseUrl}}/api/tasks/{{taskId}}
+
+### Update task
+PUT {{baseUrl}}/api/tasks/{{taskId}}
+Content-Type: application/json
+
+{
+  "status": "in-progress",
+  "actualHours": 3
+}
+
+### Mark task as complete
+PATCH {{baseUrl}}/api/tasks/{{taskId}}/complete
+
+### Add comment to task
+POST {{baseUrl}}/api/tasks/{{taskId}}/comments
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}",
+  "text": "Great progress on this task! Keep it up."
+}
+
+### Get task statistics
+GET {{baseUrl}}/api/tasks/analytics/statistics
+
+### Get task statistics for a project
+GET {{baseUrl}}/api/tasks/analytics/statistics?projectId={{projectId}}
+
+### Get overdue tasks
+GET {{baseUrl}}/api/tasks/status/overdue
+
+### Bulk update tasks
+PATCH {{baseUrl}}/api/tasks/bulk/update
+Content-Type: application/json
+
+{
+  "taskIds": ["{{taskId}}", "ANOTHER_TASK_ID"],
+  "updates": {
+    "priority": "urgent"
+  }
+}
+
+### Delete task
+DELETE {{baseUrl}}/api/tasks/{{taskId}}
+
+### ============================================
+### ADVANCED QUERIES
+### ============================================
+
+### Get users with multiple filters
+GET {{baseUrl}}/api/users?role=user&isActive=true&sortBy=createdAt&order=desc&page=1&limit=10
+
+### Get projects by owner
+GET {{baseUrl}}/api/projects?owner={{userId}}
+
+### Get completed tasks
+GET {{baseUrl}}/api/tasks?status=done
+
+### Get high priority tasks
+GET {{baseUrl}}/api/tasks?priority=high&priority=urgent
+
+### Get tasks due soon (you can add custom logic for this)
+GET {{baseUrl}}/api/tasks?sortBy=dueDate&order=asc&limit=5
+
+### ============================================
+### TESTING WORKFLOW
+### ============================================
+
+### 1. Create a user
+### 2. Copy the returned user ID
+### 3. Replace {{userId}} with the actual ID above
+### 4. Create a project
+### 5. Copy the project ID
+### 6. Replace {{projectId}} with the actual ID
+### 7. Create tasks
+### 8. Test all other endpoints

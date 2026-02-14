@@ -1,0 +1,16 @@
+node_modules
+dist
+.env
+.env.*
+!.env.example
+.git
+.gitignore
+*.md
+coverage
+.nyc_output
+.vscode
+.idea
+docker-compose.yml
+Dockerfile
+api-examples.http
+LEARNING_GUIDE.md
